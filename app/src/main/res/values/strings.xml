@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">CampusNet</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="current_usage_text">Current Usage</string>
+    <string name="usage_number">0.00</string>
+    <string name="usage_unit">GB</string>
+    <string name="balance_text">Balance</string>
+    <string name="network_text">Network</string>
+    <string name="account_text">Account</string>
+    <string name="devices_text">Devices</string>
+    <string name="balance_number">¥12.10</string>
+    <string name="no_data_text">Usage Data Unavailable</string>
+</resources>
