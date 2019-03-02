@@ -20,7 +20,7 @@ android {
     }
     externalNativeBuild {
         ndkBuild {
-            path file('src/main/cpp/tunet-c/jni/Android.mk')
+            path file('src/main/cpp/jni/Android.mk')
         }
     }
 }
