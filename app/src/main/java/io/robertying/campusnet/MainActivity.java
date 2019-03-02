@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setSwipeToRefreshIndicator();
         setChart();
-
-        System.loadLibrary("tunet");
     }
 
     private void setSwipeToRefreshIndicator() {
