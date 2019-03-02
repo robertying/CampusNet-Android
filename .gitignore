@@ -80,3 +80,5 @@ lint/tmp/
 # lint/reports/
 
 .DS_Store
+
+app/src/main/assets/cacert.pem
