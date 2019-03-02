@@ -1,0 +1,3 @@
+[submodule "app/src/main/cpp/tunet-c"]
+	path = app/src/main/cpp/tunet-c
+	url = https://github.com/robertying/tunet-c.git
