@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 class CAManager {
-    private static String caFilename = "cacert.pem";
+    public static String caFilename = "cacert.pem";
 
     public static void copyFromAssetsToInternalStorage(Context context) {
         AssetManager assetManager = context.getAssets();
