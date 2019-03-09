@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := tidy
-LOCAL_SRC_FILES := ../../../../../htmltidy/.externalNativeBuild/cmake/debug/$(TARGET_ARCH_ABI)/libtidys.a
+LOCAL_SRC_FILES := ../../../../../htmltidy/.externalNativeBuild/cmake/release/$(TARGET_ARCH_ABI)/libtidys.a
 LOCAL_EXPORT_CFLAGS := -I$(LOCAL_PATH)/../tunet-c/tidy-html5/include
 include $(PREBUILT_STATIC_LIBRARY)
 
@@ -29,5 +29,4 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../openssl/include $(LOCAL_PATH)/../curl/inclu
 LOCAL_MODULE := tunet
 LOCAL_SRC_FILES := tunet-jni.c ../tunet-c/src/tunet.c ../tunet-c/lib/portal.c ../tunet-c/lib/parser.c ../tunet-c/lib/list.c ../tunet-c/lib/utf.c ../tunet-c/utf8proc/utf8proc.c ../tunet-c/sds/sds.c ../tunet-c/cJSON/cJSON.c
 LOCAL_STATIC_LIBRARIES := libcurl libssl libcrypto libtidy
-LOCAL_LDLIBS := -lz
 include $(BUILD_SHARED_LIBRARY)

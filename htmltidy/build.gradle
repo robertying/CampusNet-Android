@@ -8,12 +8,6 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
-        externalNativeBuild {
-            cmake {
-                arguments "-DCMAKE_BUILD_TYPE=Release"
-            }
-        }
     }
 
     externalNativeBuild {
