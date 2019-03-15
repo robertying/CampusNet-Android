@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.HomeFragment">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verticalCenterGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/infoCardView"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardCornerRadius="0dp"
+                app:cardElevation="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/currentUsageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:elevation="5dp"
+                android:text="@string/current_usage_text"
+                android:textColor="@color/design_default_color_on_primary"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/infoCardView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/infoCardView"
+                tools:text="当前流量" />
+
+            <TextView
+                android:id="@+id/usageNumberTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:elevation="5dp"
+                android:text="@string/usage_number"
+                android:textColor="@color/design_default_color_on_primary"
+                android:textSize="60sp"
+                app:layout_constraintBottom_toTopOf="@+id/balanceTextView"
+                app:layout_constraintEnd_toStartOf="@id/unitTextView"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/currentUsageTextView"
+                tools:text="25.00" />
+
+            <TextView
+                android:id="@+id/unitTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="16dp"
+                android:elevation="5dp"
+                android:text="@string/usage_unit"
+                android:textColor="@color/design_default_color_on_primary"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/usageNumberTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/usageNumberTextView"
+                tools:text="GB" />
+
+            <TextView
+                android:id="@+id/balanceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:text="@string/balance_text"
+                android:textColor="@color/design_default_color_on_primary"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/balanceNumberTextView"
+                app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="余额" />
+
+            <TextView
+                android:id="@+id/balanceNumberTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:elevation="5dp"
+                android:text="@string/balance_number"
+                android:textColor="@color/design_default_color_on_primary"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/infoCardView"
+                app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="¥12.12" />
+
+            <TextView
+                android:id="@+id/accountTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:text="@string/balance_text"
+                android:textColor="@color/design_default_color_on_primary"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/balanceNumberTextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
+                tools:text="账户" />
+
+            <TextView
+                android:id="@+id/accountNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:elevation="5dp"
+                android:text="@string/balance_number"
+                android:textColor="@color/design_default_color_on_primary"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/infoCardView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
+                tools:text="yingr16" />
+
+            <TextView
+                android:id="@+id/networkTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:elevation="5dp"
+                android:text="@string/network_text"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/infoCardView"
+                tools:text="网络" />
+
+            <TextView
+                android:id="@+id/networkNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:text="@string/balance_number"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/networkTextView"
+                tools:text="Tsinghua-5G" />
+
+            <TextView
+                android:id="@+id/devicesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:elevation="5dp"
+                android:text="@string/devices_text"
+                android:textSize="18sp"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/infoCardView"
+                tools:text="设备" />
+
+            <TextView
+                android:id="@+id/devicesNumberTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:text="@string/balance_number"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.6"
+                app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
+                app:layout_constraintTop_toBottomOf="@+id/devicesTextView"
+                tools:text="3" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/loginButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/anim_play_stop_loop"
+                android:visibility="gone"
+                app:backgroundTint="?attr/colorButtonNormal"
+                app:elevation="10dp"
+                app:fabCustomSize="80dp"
+                app:layout_constraintBottom_toBottomOf="@id/infoCardView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/infoCardView"
+                app:maxImageSize="80dp"
+                app:rippleColor="?android:attr/colorControlHighlight"
+                app:tint="@color/colorPrimary" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="32dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/networkNameTextView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</FrameLayout>

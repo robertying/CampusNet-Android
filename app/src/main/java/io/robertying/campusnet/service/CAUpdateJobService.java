@@ -1,4 +1,4 @@
-package io.robertying.campusnet;
+package io.robertying.campusnet.service;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;
@@ -13,19 +13,21 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import static io.robertying.campusnet.CAManager.caFilename;
+import io.robertying.campusnet.helper.CAHelper;
 
 public class CAUpdateJobService extends JobService {
-    static public int JOB_ID = 100;
-    static private String caURL = "https://curl.haxx.se/ca/cacert.pem";
+
+    static final public int JOB_ID = 100;
+    public final String CLASS_NAME = getClass().getSimpleName();
 
     @Override
     public boolean onStartJob(final JobParameters params) {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                Log.i(CLASS_NAME, "Started CA update");
                 boolean success = downloadCA();
-                jobFinished(params, !success);
+                jobFinished(params, false);
             }
         }).start();
 
@@ -38,6 +40,7 @@ public class CAUpdateJobService extends JobService {
     }
 
     private boolean downloadCA() {
+        String caURL = "https://curl.haxx.se/ca/cacert.pem";
         InputStream in = null;
         OutputStream out = null;
         HttpsURLConnection connection = null;
@@ -58,7 +61,7 @@ public class CAUpdateJobService extends JobService {
             }
 
             in = connection.getInputStream();
-            File newFile = new File(getFilesDir(), caFilename + ".tmp");
+            File newFile = new File(getFilesDir(), CAHelper.caFilename + ".tmp");
             out = new FileOutputStream(newFile, false);
 
             byte[] buffer = new byte[1024];
@@ -68,25 +71,27 @@ public class CAUpdateJobService extends JobService {
             }
             out.flush();
 
-            File oldFile = new File(getFilesDir(), caFilename);
+            File oldFile = new File(getFilesDir(), CAHelper.caFilename);
             success = newFile.renameTo(oldFile);
         } catch (IOException e) {
-            Log.e(CAUpdateJobService.class.getSimpleName(), e.getMessage());
+            Log.e(CLASS_NAME, e.getMessage());
         } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    Log.e(CAUpdateJobService.class.getSimpleName(), e.getMessage());
+                    Log.e(CLASS_NAME, e.getMessage());
                 }
             }
+
             if (out != null) {
                 try {
                     out.close();
                 } catch (IOException e) {
-                    Log.e(CAUpdateJobService.class.getSimpleName(), e.getMessage());
+                    Log.e(CLASS_NAME, e.getMessage());
                 }
             }
+
             if (connection != null) {
                 connection.disconnect();
             }

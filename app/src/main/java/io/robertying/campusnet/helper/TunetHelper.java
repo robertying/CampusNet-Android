@@ -1,34 +1,43 @@
-package io.robertying.campusnet;
+package io.robertying.campusnet.helper;
 
 import android.content.Context;
 
-class TunetHelper {
+import androidx.annotation.NonNull;
+
+public class TunetHelper {
+
     private native static void tunetInit(String caBundlePath);
 
     private native static void tunetCleanup();
 
+    @NonNull
     public native static ResponseType netLogin(String username, String password);
 
+    @NonNull
     public native static ResponseType auth4Login(String username, String password);
 
+    @NonNull
     public native static ResponseType auth6Login(String username, String password);
 
+    @NonNull
     public native static ResponseType netLogout();
 
+    @NonNull
     public native static ResponseType auth4Logout();
 
+    @NonNull
     public native static ResponseType auth6Logout();
 
-    public static void init(Context context) {
+    public static void init(@NonNull Context context) {
         System.loadLibrary("tunet");
-        tunetInit(CAManager.getCABundlePath(context));
+        tunetInit(CAHelper.getCABundlePath(context));
     }
 
     public static void cleanup() {
         tunetCleanup();
     }
 
-    enum ResponseType {
+    public enum ResponseType {
         SUCCESS,
         UNKNOWN_ERR,
         EMPTY_CHALLENGE,

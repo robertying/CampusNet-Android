@@ -9,8 +9,8 @@
         android:pivotX="12"
         android:pivotY="12">
         <path
-            android:name="play"
+            android:name="stop"
             android:fillColor="#FF000000"
-            android:pathData="@string/path_play" />
+            android:pathData="@string/path_stop" />
     </group>
 </vector>

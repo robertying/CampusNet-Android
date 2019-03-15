@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <SwitchPreferenceCompat
+        app:iconSpaceReserved="false"
+        app:key="AutoLogin"
+        app:title="@string/auto_login_preference_title"
+        app:summary="@string/auto_login_preference_summary"/>
+
+
+</androidx.preference.PreferenceScreen>
