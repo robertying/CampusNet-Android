@@ -23,5 +23,7 @@ public class UseregHelper {
 
     public native static float getUsage();
 
+    public native static float getBalance();
+
     public native static float getUsageDetail(String username, String password, String startTime, String endTime);
 }

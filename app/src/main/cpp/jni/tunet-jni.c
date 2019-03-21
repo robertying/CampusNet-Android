@@ -115,6 +115,11 @@ JNIEXPORT jfloat JNICALL Java_io_robertying_campusnet_helper_UseregHelper_getUsa
     return usereg_get_usage();
 }
 
+JNIEXPORT jfloat JNICALL Java_io_robertying_campusnet_helper_UseregHelper_getBalance(JNIEnv *env,
+                                                                                     jobject this) {
+    return usereg_get_balance();
+}
+
 JNIEXPORT jfloat JNICALL
 Java_io_robertying_campusnet_helper_UseregHelper_getUsageDetail(JNIEnv *env,
                                                                 jobject this,
