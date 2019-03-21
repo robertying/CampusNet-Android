@@ -60,10 +60,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             autoLoginSwitchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Log.i(CLASS_NAME,
-                            "Location permission " + (hasLocationPermission() ? "" : "not ") + "granted");
                     if (!autoLoginSwitchPreference.isChecked() && !hasLocationPermission())
                         showLocationPermissionExplanation();
+                    else if (!autoLoginSwitchPreference.isChecked())
+                        startAutoLoginService();
+                    else if (autoLoginSwitchPreference.isChecked())
+                        stopAutoLoginService();
 
                     return true;
                 }
@@ -117,9 +119,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private boolean hasLocationPermission() {
-        return ContextCompat.checkSelfPermission(activity,
+        boolean hasPermission = ContextCompat.checkSelfPermission(activity,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED;
+        Log.i(CLASS_NAME,
+                "Location permission " + (hasPermission ? "" : "not ") + "granted");
+        return hasPermission;
     }
 
     private void requestLocationPermission() {
@@ -146,15 +151,26 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     autoLoginSwitchPreference.setChecked(true);
                     Log.i(CLASS_NAME, "Location permission granted");
 
-                    Intent autoLoginServiceIntent = new Intent(activity, AutoLoginService.class);
-                    autoLoginServiceIntent.setAction(AutoLoginService.ACTION_START_FOREGROUND_SERVICE);
-                    activity.startService(autoLoginServiceIntent);
-                    Log.i(CLASS_NAME, "Started AutoLoginService");
+                    startAutoLoginService();
                 } else {
                     autoLoginSwitchPreference.setChecked(false);
                     Log.i(CLASS_NAME, "Location permission denied");
                 }
             }
         }
+    }
+
+    private void startAutoLoginService() {
+        Intent autoLoginServiceIntent = new Intent(activity, AutoLoginService.class);
+        autoLoginServiceIntent.setAction(AutoLoginService.ACTION_START_FOREGROUND_SERVICE);
+        activity.startService(autoLoginServiceIntent);
+        Log.i(CLASS_NAME, "Started AutoLoginService");
+    }
+
+    private void stopAutoLoginService() {
+        Intent autoLoginServiceIntent = new Intent(activity, AutoLoginService.class);
+        autoLoginServiceIntent.setAction(AutoLoginService.ACTION_STOP_FOREGROUND_SERVICE);
+        activity.startService(autoLoginServiceIntent);
+        Log.i(CLASS_NAME, "Stopped AutoLoginService");
     }
 }
