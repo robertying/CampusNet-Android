@@ -114,7 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="5dp"
-                android:text="@string/balance_text"
+                android:text="@string/account_text"
                 android:textColor="@color/design_default_color_on_primary"
                 android:textSize="18sp"
                 android:visibility="visible"

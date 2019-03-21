@@ -2,6 +2,7 @@ package io.robertying.campusnet.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -42,12 +45,18 @@ public class HomeFragment extends Fragment {
 
     private final String CLASS_NAME = getClass().getSimpleName();
 
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private BottomNavigationView navigationView;
-
     private Context context;
     private FragmentActivity activity;
     private View view;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private BottomNavigationView navigationView;
+    private TextView usageTextView;
+    private TextView balanceTextView;
+    private TextView accountTextView;
+    private TextView networkTextView;
+    private TextView devicesTextView;
+    private LineChart chart;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -64,9 +73,15 @@ public class HomeFragment extends Fragment {
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         navigationView = activity.findViewById(R.id.navigation);
+        usageTextView = view.findViewById(R.id.usageNumberTextView);
+        balanceTextView = view.findViewById(R.id.balanceNumberTextView);
+        accountTextView = view.findViewById(R.id.accountNameTextView);
+        networkTextView = view.findViewById(R.id.networkNameTextView);
+        devicesTextView = view.findViewById(R.id.devicesNumberTextView);
+        chart = view.findViewById(R.id.chart);
 
         setSwipeToRefreshIndicator();
-        setUsageText();
+        setInfo();
         setChart();
 
         TunetHelper.init(context);
@@ -77,7 +92,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        updateChart();
+        update();
     }
 
     @Override
@@ -98,19 +113,21 @@ public class HomeFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateChart();
+                update();
             }
         });
     }
 
-    private void setUsageText() {
-        TextView usageTextView = view.findViewById(R.id.usageNumberTextView);
-
+    private void setInfo() {
         SharedPreferences preferences = context
                 .getApplicationContext()
                 .getSharedPreferences("AppInfo", MODE_PRIVATE);
+        String[] credentials = CredentialHelper.getCredentials(context);
 
         usageTextView.setText(preferences.getString("Usage", "0.00"));
+        balanceTextView.setText(preferences.getString("Balance", "0.00"));
+        if (credentials != null)
+            accountTextView.setText(credentials[0]);
     }
 
     private void setChart() {
@@ -118,8 +135,6 @@ public class HomeFragment extends Fragment {
                 .getResources().getColor(R.color.colorPrimary);
         int dividerColor = context.getApplicationContext()
                 .getResources().getColor(R.color.divider);
-
-        LineChart chart = view.findViewById(R.id.chart);
 
         chart.setTouchEnabled(false);
         chart.setDragEnabled(false);
@@ -145,7 +160,6 @@ public class HomeFragment extends Fragment {
         xAxis.setTextColor(primaryColor);
 
         YAxis yAxis = chart.getAxisLeft();
-        // TODO: yAxis.addLimitLine();
         yAxis.setDrawAxisLine(false);
         yAxis.setAxisMinimum(0);
         yAxis.setAxisLineWidth(1f);
@@ -160,13 +174,38 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void updateChart() {
-        Log.i(CLASS_NAME, "Updating chart");
+    private void update() {
+        Log.i(CLASS_NAME, "Updating info");
         swipeRefreshLayout.setRefreshing(true);
 
         String[] credentials = CredentialHelper.getCredentials(context);
         new LoginTask().execute(credentials);
+        getNetwork();
+        getSessions(credentials);
         new GetUsageDetailTask().execute(credentials);
+    }
+
+    private void getNetwork() {
+        networkTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                WifiManager wifiManager = (WifiManager)
+                        context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                String ssid = wifiManager.getConnectionInfo().getSSID();
+                networkTextView.setText(ssid.replaceAll("^\"|\"$", ""));
+            }
+        });
+    }
+
+    private void getSessions(final String[] credentials) {
+        devicesTextView.post(new Runnable() {
+            @Override
+            public void run() {
+                String response = UseregHelper.getSessions(credentials[0], credentials[1]);
+                JsonArray sessions = new JsonParser().parse(response).getAsJsonArray();
+                devicesTextView.setText(Integer.toString(sessions.size()));
+            }
+        });
     }
 
     @NonNull
@@ -275,6 +314,7 @@ public class HomeFragment extends Fragment {
     private class LoginResponse {
         TunetHelper.ResponseType response;
         float usage;
+        float balance;
     }
 
     private class LoginTask extends AsyncTask<String, Void, LoginResponse> {
@@ -289,10 +329,12 @@ public class HomeFragment extends Fragment {
             if (username == null || password == null) {
                 loginResponse.response = TunetHelper.ResponseType.WRONG_CREDENTIAL;
                 loginResponse.usage = 0;
+                loginResponse.balance = 0;
             } else {
                 TunetHelper.auth4Login(username, password);
                 loginResponse.response = TunetHelper.netLogin(username, password);
                 loginResponse.usage = UseregHelper.getUsage();
+                loginResponse.balance = UseregHelper.getBalance();
             }
 
             return loginResponse;
@@ -300,16 +342,28 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(@NonNull LoginResponse loginResponse) {
-            String text = String.format("%.2f", loginResponse.usage / 10e8f);
-            TextView usageTextView = view.findViewById(R.id.usageNumberTextView);
-            usageTextView.setText(text);
-
             SharedPreferences preferences = context
                     .getApplicationContext()
                     .getSharedPreferences("AppInfo", MODE_PRIVATE);
-            preferences.edit()
-                    .putString("Usage", text)
-                    .apply();
+
+            if (loginResponse.usage != 0) {
+                String usageText = String.format("%.2f", loginResponse.usage / 10e8f);
+                TextView usageTextView = view.findViewById(R.id.usageNumberTextView);
+                usageTextView.setText(usageText);
+
+                preferences.edit()
+                        .putString("Usage", usageText)
+                        .apply();
+            }
+            if (loginResponse.balance != 0) {
+                String balanceText = "¥ " + String.format("%.2f", loginResponse.balance);
+                TextView balanceTextView = view.findViewById(R.id.balanceNumberTextView);
+                balanceTextView.setText(balanceText);
+
+                preferences.edit()
+                        .putString("Balance", balanceText)
+                        .apply();
+            }
 
             switch (loginResponse.response) {
                 case OUT_OF_BALANCE:
@@ -317,7 +371,7 @@ public class HomeFragment extends Fragment {
                     break;
                 case ALREADY_ONLINE:
                 case SUCCESS:
-                    makeSnackbar(getResources().getString(R.string.wrong_credentials));
+                    makeSnackbar(getResources().getString(R.string.login_success));
                     break;
                 case WRONG_CREDENTIAL:
                     makeSnackbar(getResources().getString(R.string.wrong_credentials));
