@@ -2,10 +2,8 @@ package io.robertying.campusnet.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +17,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,12 +27,11 @@ import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.vectordrawable.graphics.drawable.Animatable2Compat;
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 import io.robertying.campusnet.R;
+import io.robertying.campusnet.custom.MySnackbar;
 import io.robertying.campusnet.helper.CredentialHelper;
 import io.robertying.campusnet.helper.TunetHelper;
 import io.robertying.campusnet.helper.UseregHelper;
@@ -44,12 +42,12 @@ public class HomeFragment extends Fragment {
 
     private final String CLASS_NAME = getClass().getSimpleName();
 
-    private Context context;
-    private View view;
-    @Nullable
-    private AnimatedVectorDrawableCompat loginAnimation;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private BottomNavigationView navigationView;
 
-    private boolean clicked = false;
+    private Context context;
+    private FragmentActivity activity;
+    private View view;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -62,11 +60,14 @@ public class HomeFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
+        activity = getActivity();
+
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        navigationView = activity.findViewById(R.id.navigation);
 
         setSwipeToRefreshIndicator();
         setUsageText();
         setChart();
-        setLoginButton();
 
         TunetHelper.init(context);
 
@@ -87,13 +88,12 @@ public class HomeFragment extends Fragment {
 
     private void setSwipeToRefreshIndicator() {
         // set indicator color
-        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
 
         // set indicator position
         swipeRefreshLayout.setProgressViewOffset(false,
                 swipeRefreshLayout.getProgressViewStartOffset(),
-                swipeRefreshLayout.getProgressViewEndOffset() - 48);
+                swipeRefreshLayout.getProgressViewEndOffset() - 150);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -162,43 +162,11 @@ public class HomeFragment extends Fragment {
 
     private void updateChart() {
         Log.i(CLASS_NAME, "Updating chart");
+        swipeRefreshLayout.setRefreshing(true);
 
         String[] credentials = CredentialHelper.getCredentials(context);
         new LoginTask().execute(credentials);
         new GetUsageDetailTask().execute(credentials);
-    }
-
-    private void setLoginButton() {
-        FloatingActionButton loginButton = view.findViewById(R.id.loginButton);
-        loginAnimation = AnimatedVectorDrawableCompat.create(context, R.drawable.anim_play_stop_loop);
-        loginButton.setImageDrawable(loginAnimation);
-
-        final Animatable2Compat.AnimationCallback callback = new Animatable2Compat.AnimationCallback() {
-            @Override
-            public void onAnimationEnd(Drawable drawable) {
-                super.onAnimationEnd(drawable);
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        loginAnimation.start();
-                    }
-                }, 250);
-            }
-        };
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!clicked) {
-                    loginAnimation.registerAnimationCallback(callback);
-                    loginAnimation.start();
-                } else {
-                    loginAnimation.unregisterAnimationCallback(callback);
-                }
-
-                clicked = !clicked;
-            }
-        });
     }
 
     @NonNull
@@ -295,6 +263,15 @@ public class HomeFragment extends Fragment {
         chart.invalidate();
     }
 
+    private void makeSnackbar(CharSequence text) {
+        MySnackbar.make(context,
+                swipeRefreshLayout,
+                navigationView,
+                text,
+                Snackbar.LENGTH_LONG)
+                .show();
+    }
+
     private class LoginResponse {
         TunetHelper.ResponseType response;
         float usage;
@@ -323,14 +300,6 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(@NonNull LoginResponse loginResponse) {
-//            FloatingActionButton loginButton = view.findViewById(R.id.loginButton);
-//            MySnackbar.make(context,
-//                    loginButton,
-//                    null,
-//                    getResources().getString(R.string.login_success),
-//                    Snackbar.LENGTH_LONG)
-//                    .show();
-
             String text = String.format("%.2f", loginResponse.usage / 10e8f);
             TextView usageTextView = view.findViewById(R.id.usageNumberTextView);
             usageTextView.setText(text);
@@ -341,6 +310,22 @@ public class HomeFragment extends Fragment {
             preferences.edit()
                     .putString("Usage", text)
                     .apply();
+
+            switch (loginResponse.response) {
+                case OUT_OF_BALANCE:
+                    makeSnackbar(getResources().getString(R.string.out_of_balance));
+                    break;
+                case ALREADY_ONLINE:
+                case SUCCESS:
+                    makeSnackbar(getResources().getString(R.string.wrong_credentials));
+                    break;
+                case WRONG_CREDENTIAL:
+                    makeSnackbar(getResources().getString(R.string.wrong_credentials));
+                    break;
+                case UNKNOWN_ERR:
+                    makeSnackbar(getResources().getString(R.string.unknown_error));
+                    break;
+            }
         }
     }
 
@@ -354,8 +339,6 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Entry> entries) {
             setChartData(entries);
-
-            SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
             swipeRefreshLayout.setRefreshing(false);
         }
     }

@@ -53,6 +53,7 @@
                 android:id="@+id/usageNumberTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:elevation="5dp"
                 android:text="@string/usage_number"
@@ -88,10 +89,9 @@
                 android:text="@string/balance_text"
                 android:textColor="@color/design_default_color_on_primary"
                 android:textSize="18sp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/balanceNumberTextView"
                 app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
-                app:layout_constraintHorizontal_bias="0.4"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="余额" />
 
@@ -101,12 +101,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:elevation="5dp"
-                android:text="@string/balance_number"
+                android:text="@string/placeholder"
                 android:textColor="@color/design_default_color_on_primary"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/infoCardView"
                 app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
-                app:layout_constraintHorizontal_bias="0.4"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="¥12.12" />
 
@@ -118,10 +117,9 @@
                 android:text="@string/balance_text"
                 android:textColor="@color/design_default_color_on_primary"
                 android:textSize="18sp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@+id/balanceNumberTextView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.6"
                 app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
                 tools:text="账户" />
 
@@ -131,12 +129,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:elevation="5dp"
-                android:text="@string/balance_number"
+                android:text="@string/placeholder"
                 android:textColor="@color/design_default_color_on_primary"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/infoCardView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.6"
                 app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
                 tools:text="yingr16" />
 
@@ -148,9 +145,8 @@
                 android:elevation="5dp"
                 android:text="@string/network_text"
                 android:textSize="18sp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
-                app:layout_constraintHorizontal_bias="0.4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/infoCardView"
                 tools:text="网络" />
@@ -160,10 +156,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="5dp"
-                android:text="@string/balance_number"
-                android:visibility="invisible"
+                android:text="@string/placeholder"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
-                app:layout_constraintHorizontal_bias="0.4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/networkTextView"
                 tools:text="Tsinghua-5G" />
@@ -176,9 +171,8 @@
                 android:elevation="5dp"
                 android:text="@string/devices_text"
                 android:textSize="18sp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.6"
                 app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
                 app:layout_constraintTop_toBottomOf="@+id/infoCardView"
                 tools:text="设备" />
@@ -188,33 +182,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="5dp"
-                android:text="@string/balance_number"
-                android:visibility="invisible"
+                android:text="@string/placeholder"
+                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.6"
                 app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
                 app:layout_constraintTop_toBottomOf="@+id/devicesTextView"
                 tools:text="3" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/loginButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:src="@drawable/anim_play_stop_loop"
-                android:visibility="gone"
-                app:backgroundTint="?attr/colorButtonNormal"
-                app:elevation="10dp"
-                app:fabCustomSize="80dp"
-                app:layout_constraintBottom_toBottomOf="@id/infoCardView"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/infoCardView"
-                app:maxImageSize="80dp"
-                app:rippleColor="?android:attr/colorControlHighlight"
-                app:tint="@color/colorPrimary" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart"

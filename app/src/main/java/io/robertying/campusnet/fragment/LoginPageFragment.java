@@ -72,7 +72,7 @@ public class LoginPageFragment extends Fragment {
                     MySnackbar.make(context,
                             nextButton,
                             nextButton,
-                            context.getResources().getString(R.string.missing_credentials),
+                            context.getResources().getString(R.string.missing_credentials_prompt),
                             Snackbar.LENGTH_LONG)
                             .show();
 
@@ -147,7 +147,7 @@ public class LoginPageFragment extends Fragment {
                     MySnackbar.make(context,
                             nextButton,
                             nextButton,
-                            context.getResources().getString(R.string.wrong_credentials),
+                            context.getResources().getString(R.string.wrong_credentials_prompt),
                             Snackbar.LENGTH_LONG)
                             .show();
                     break;

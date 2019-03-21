@@ -11,7 +11,7 @@
     <string name="network_text">Network</string>
     <string name="account_text">Account</string>
     <string name="devices_text">Devices</string>
-    <string name="balance_number">¥12.10</string>
+    <string name="placeholder">--</string>
     <string name="no_data_text">Usage Data Unavailable</string>
 
     <string name="service_channel_name">CampusNet Service Channel</string>
@@ -33,16 +33,15 @@
     <string name="done_text">Done</string>
 
     <string name="login_success">Successfully login to the network</string>
-    <string name="missing_credentials">Please complete both the username and the password</string>
-    <string name="wrong_credentials">Please enter the correct username or password</string>
+    <string name="missing_credentials_prompt">Please complete both the username and the password</string>
+    <string name="wrong_credentials">It seems your password has changed\nHead to Settings to enter the right credentials</string>
+    <string name="wrong_credentials_prompt">Please enter the correct username or password</string>
     <string name="unknown_error">Unknown error: Please make sure you are connected to campus networks</string>
+    <string name="out_of_balance">You are out of balance\nPlease recharge your account</string>
 
     <string name="auto_login_preference_title">Enable Auto Login for campus networks</string>
-    <string name="auto_login_preference_summary">For devices running Android 7.0 or newer,
-        the App needs "Location Permission" to listen Wi-Fi changes and has to show a persistent
-        notification in order to automatically login campus networks when your Wi-Fi changes</string>
-    <string name="request_location_permission_description">Enabling Auto Login will require
-        "Location Permission". Please grant the permission in the following system popup.</string>
+    <string name="auto_login_preference_summary">For devices running Android 7.0 or newer, the App needs "Location Permission" to listen Wi-Fi changes and has to show a persistent notification in order to automatically login campus networks when your Wi-Fi changes</string>
+    <string name="request_location_permission_description">Enabling Auto Login will require "Location Permission". Please grant the permission in the following system popup.</string>
 
     <string name="logout_confirmation">Are you sure you want to log out?</string>
     <string name="acknowledged_text">Acknowledged</string>
