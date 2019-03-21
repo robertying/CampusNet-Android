@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "433382873934",
+    "firebase_url": "https://campusnet-96d42.firebaseio.com",
+    "project_id": "campusnet-96d42",
+    "storage_bucket": "campusnet-96d42.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433382873934:android:71f64e4b2f5f2234",
+        "android_client_info": {
+          "package_name": "io.robertying.campusnet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433382873934-8l5evma7qnjevnq0j1rk4j6hundqrpjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB_nIWZTbmcldQmciY4-BQ3jVTw0A9ymyc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
