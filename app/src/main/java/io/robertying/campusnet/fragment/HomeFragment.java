@@ -210,20 +210,41 @@ public class HomeFragment extends Fragment {
         String year = Integer.toString(y);
         String month = m < 10 ? "0" + Integer.toString(m) : Integer.toString(m);
         float sum = 0;
+        int i;
 
         List<Entry> entries = new ArrayList<>();
-        for (int i = 1; i <= d; i++) {
-            String day = i < 10 ? "0" + Integer.toString(i) : Integer.toString(i);
-            String startTime = year + "-" + month + "-" + day;
+        entries.add(new Entry(0, 0.0f));
+
+        for (i = 5; i <= d; i += 5) {
+            String startDay = i - 4 < 10 ? "0" + Integer.toString(i - 4) : Integer.toString(i - 4);
+            String endDay = i < 10 ? "0" + Integer.toString(i) : Integer.toString(i);
+            String startTime = year + "-" + month + "-" + startDay;
+            String endTime = year + "-" + month + "-" + endDay;
 
             float usageInGB = UseregHelper.getUsageDetail(username,
                     password,
                     startTime,
-                    startTime)
+                    endTime)
                     / 10e8f;
             sum += usageInGB;
 
             entries.add(new Entry(i, sum));
+        }
+
+        if (i - 4 <= d) {
+            String startDay = i - 4 < 10 ? "0" + Integer.toString(i - 4) : Integer.toString(i - 4);
+            String endDay = d < 10 ? "0" + Integer.toString(d) : Integer.toString(d);
+            String startTime = year + "-" + month + "-" + startDay;
+            String endTime = year + "-" + month + "-" + endDay;
+
+            float usageInGB = UseregHelper.getUsageDetail(username,
+                    password,
+                    startTime,
+                    endTime)
+                    / 10e8f;
+            sum += usageInGB;
+
+            entries.add(new Entry(d, sum));
         }
 
         saveUsageDetail(entries);
@@ -262,13 +283,14 @@ public class HomeFragment extends Fragment {
                 .getDrawable(R.drawable.linear_gradient_primary_color));
         dataSet.setDrawFilled(true);
         dataSet.setDrawValues(false);
-        // dataSet.setValueTextColor(primaryColor);
-        // dataSet.setValueTextSize(14);
+        dataSet.setValueTextColor(primaryColor);
+        dataSet.setValueTextSize(12);
         dataSet.setCircleColor(primaryColor);
         dataSet.setColor(primaryColor);
 
         LineChart chart = view.findViewById(R.id.chart);
 
+        chart.clear();
         chart.setData(new LineData(dataSet));
         chart.invalidate();
     }
