@@ -25,7 +25,9 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 import io.robertying.campusnet.R;
+import io.robertying.campusnet.activity.FirstRunActivity;
 import io.robertying.campusnet.activity.MainActivity;
+import io.robertying.campusnet.helper.CredentialHelper;
 import io.robertying.campusnet.service.AutoLoginService;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
@@ -41,7 +43,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.init_preferences);
-        addPreferencesFromResource(R.xml.preferences);
+
+        activity = getActivity();
+        if (activity.getClass().getSimpleName().equals("MainActivity"))
+            addPreferencesFromResource(R.xml.preferences);
     }
 
     @Override
@@ -70,6 +75,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     return true;
                 }
             });
+
+            if (activity.getClass().getSimpleName().equals("MainActivity")) {
+                Preference logoutPreference = findPreference("Logout");
+                logoutPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        showLogoutConfirmation();
+                        return true;
+                    }
+                });
+            }
         }
 
         return view;
@@ -113,6 +129,34 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                             @Override
                             public void onClick(DialogInterface dialog, int i) {
                                 requestLocationPermission();
+                            }
+                        })
+                .show();
+    }
+
+    private void showLogoutConfirmation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setMessage(getResources().getString(R.string.logout_confirmation))
+                .setPositiveButton(getResources().getString(R.string.yes),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                stopAutoLoginService();
+                                CredentialHelper.removeCredentials(activity);
+
+                                FragmentActivity activity = getActivity();
+                                if (activity != null) {
+                                    Intent intent = new Intent(activity, FirstRunActivity.class);
+                                    startActivity(intent);
+                                    activity.finish();
+                                }
+                            }
+                        })
+                .setNegativeButton(getResources().getString(R.string.no),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
                             }
                         })
                 .show();

@@ -44,5 +44,8 @@
     <string name="request_location_permission_description">Enabling Auto Login will require
         "Location Permission". Please grant the permission in the following system popup.</string>
 
+    <string name="logout_confirmation">Are you sure you want to log out?</string>
     <string name="acknowledged_text">Acknowledged</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

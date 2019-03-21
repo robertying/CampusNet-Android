@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
@@ -16,6 +17,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 import io.robertying.campusnet.R;
 import io.robertying.campusnet.custom.MySnackbar;
@@ -33,6 +35,7 @@ public class LoginPageFragment extends Fragment {
 
     private ViewPager viewPager;
     private Context context;
+    private FragmentActivity activity;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -43,6 +46,8 @@ public class LoginPageFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        activity = getActivity();
+
         View view = inflater.inflate(R.layout.fragment_login_page, container, false);
 
         viewPager = (ViewPager) container;
@@ -87,6 +92,14 @@ public class LoginPageFragment extends Fragment {
         UseregHelper.cleanup();
     }
 
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) activity
+                .getApplicationContext()
+                .getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(passwordTextField.getWindowToken(), 0);
+    }
+
     private void saveCredentials(String username, String password) {
         // there seems to be no proper way to store plain passwords
         // when a rooted device is concerned
@@ -127,6 +140,7 @@ public class LoginPageFragment extends Fragment {
                     saveCredentials(loginResponse.username, loginResponse.password);
                     usernameTextField.clearFocus();
                     passwordTextField.clearFocus();
+                    hideKeyboard();
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
                     break;
                 case WRONG_CREDENTIAL:

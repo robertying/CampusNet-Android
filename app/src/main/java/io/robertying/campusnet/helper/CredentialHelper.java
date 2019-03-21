@@ -20,4 +20,10 @@ public class CredentialHelper {
         String[] credentials = {username, password};
         return credentials;
     }
+
+    public static void removeCredentials(Context context) {
+        SharedPreferences preferences = context
+                .getApplicationContext().getSharedPreferences("Credentials", MODE_PRIVATE);
+        preferences.edit().clear().apply();
+    }
 }
