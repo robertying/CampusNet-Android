@@ -131,6 +131,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                                 requestLocationPermission();
                             }
                         })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        autoLoginSwitchPreference.setChecked(false);
+                    }
+                })
                 .show();
     }
 
