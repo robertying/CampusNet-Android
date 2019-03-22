@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := tidy
-LOCAL_SRC_FILES := ../../../../../htmltidy/.externalNativeBuild/cmake/release/$(TARGET_ARCH_ABI)/libtidys.a
+LOCAL_SRC_FILES := ../../../../../htmltidy/.externalNativeBuild/cmake/$(APP_OPTIM)/$(TARGET_ARCH_ABI)/libtidys.a
 LOCAL_EXPORT_CFLAGS := -I$(LOCAL_PATH)/../tunet-c/tidy-html5/include
 include $(PREBUILT_STATIC_LIBRARY)
 
