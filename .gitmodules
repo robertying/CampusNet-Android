@@ -1,6 +1,8 @@
 [submodule "app/src/main/cpp/tunet-c"]
 	path = app/src/main/cpp/tunet-c
 	url = https://github.com/robertying/tunet-c.git
+	ignore = dirty
 [submodule "app/src/main/cpp/openssl-curl-android"]
 	path = app/src/main/cpp/openssl-curl-android
 	url = https://github.com/robertying/openssl-curl-android.git
+	ignore = dirty
