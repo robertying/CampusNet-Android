@@ -1,6 +1,5 @@
 package io.robertying.campusnet.fragment;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -20,6 +19,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import io.robertying.campusnet.R;
 import io.robertying.campusnet.helper.CredentialHelper;
@@ -110,12 +110,18 @@ public class DeviceFragment extends DialogFragment {
 
                         listener.onDialogClose(selectedDevices.size());
                     }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
                 });
 
         return builder.create();
     }
 
     public interface DeviceFragmentListener {
-        public void onDialogClose(int dropped);
+        void onDialogClose(int dropped);
     }
 }

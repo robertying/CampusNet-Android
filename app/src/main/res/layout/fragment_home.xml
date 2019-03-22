@@ -195,7 +195,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/white"
                 android:contentDescription="@string/devices_text"
-                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                app:srcCompat="@drawable/ic_keyboard_arrow_right_black_24dp"
                 android:tint="@android:color/tab_indicator_text"
                 app:layout_constraintBottom_toBottomOf="@+id/devices_number_textView"
                 app:layout_constraintStart_toEndOf="@+id/devices_text_view"
