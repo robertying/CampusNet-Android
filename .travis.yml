@@ -9,12 +9,14 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
   licenses:
-    - android-sdk-license
     - android-sdk-license-.+
-    - ".+"
 before_install:
   - openssl aes-256-cbc -K $encrypted_dd2221beaadf_key -iv $encrypted_dd2221beaadf_iv
     -in app/google-services.json.enc -out app/google-services.json -d
+  - openssl aes-256-cbc -K $encrypted_760efcc15f1f_key -iv $encrypted_760efcc15f1f_iv
+    -in .env.default.enc -out .env.default -d
+  - openssl aes-256-cbc -K $encrypted_760efcc15f1f_key -iv $encrypted_760efcc15f1f_iv
+    -in local.keystore.enc -out local.keystore -d
 install:
   - echo y | sdkmanager "ndk-bundle"
   - gem install bundler

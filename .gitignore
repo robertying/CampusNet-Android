@@ -84,4 +84,8 @@ lint/tmp/
 
 app/src/main/assets/cacert.pem
 app/release/output.json
+
+# secrets
 app/google-services.json
+local.keystore
+.env.default
