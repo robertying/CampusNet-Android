@@ -5,7 +5,6 @@
 
     <dist:module dist:instant="true" />
 
-    <!-- TODO: permission based on sdk -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -18,9 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".activity.FirstRunActivity"
-            android:windowSoftInputMode="adjustResize" />
 
         <service
             android:name=".service.CAUpdateJobService"
@@ -33,6 +29,9 @@
             android:exported="false" />
 
         <activity
+            android:name=".activity.FirstRunActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
@@ -42,5 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 </manifest>

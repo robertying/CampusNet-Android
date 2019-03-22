@@ -3,48 +3,45 @@
     <string name="app_name">CampusNet</string>
     <string name="title_home">Home</string>
     <string name="title_settings">Settings</string>
-
     <string name="current_usage_text">Current Usage</string>
-    <string name="usage_number">0.00</string>
-    <string name="usage_unit">GB</string>
+    <string name="usage_number" translatable="false">0.00</string>
+    <string name="usage_unit" translatable="false">GB</string>
     <string name="balance_text">Balance</string>
     <string name="network_text">Network</string>
     <string name="account_text">Account</string>
     <string name="devices_text">Devices</string>
-    <string name="placeholder">--</string>
+    <string name="placeholder" translatable="false">--</string>
     <string name="no_data_text">Usage Data Unavailable</string>
-
     <string name="service_channel_name">CampusNet Service Channel</string>
     <string name="service_channel_description">Used to display the app\'s service running state</string>
-
     <string name="app_channel_name">CampusNet Notification Channel</string>
     <string name="app_channel_description">Used to display campus network status or alerts</string>
-
     <string name="ca_update_service_description">Used to update CA certificates in order for cURL to work</string>
     <string name="auto_login_service_description">Used to listen network changes in order to perform Auto Login</string>
-    <string name="auto_login_notification_title">CampusNet</string>
+    <string name="auto_login_notification_title" translatable="false">CampusNet</string>
     <string name="auto_login_notification_text">Auto Login Service is running</string>
-
-    <string name="logo_content_description">logo</string>
+    <string name="logo_content_description" translatable="false">logo</string>
     <string name="username_text">Username</string>
     <string name="password_text">Password</string>
     <string name="prev_text">Prev</string>
     <string name="next_text">Next</string>
     <string name="done_text">Done</string>
-
     <string name="login_success">Successfully login to the network</string>
     <string name="missing_credentials_prompt">Please complete both the username and the password</string>
     <string name="wrong_credentials">It seems your password has changed\nHead to Settings to enter the right credentials</string>
     <string name="wrong_credentials_prompt">Please enter the correct username or password</string>
     <string name="unknown_error">Unknown error: Please make sure you are connected to campus networks</string>
     <string name="out_of_balance">You are out of balance\nPlease recharge your account</string>
-
     <string name="auto_login_preference_title">Enable Auto Login for campus networks</string>
-    <string name="auto_login_preference_summary">For devices running Android 7.0 or newer, the App needs "Location Permission" to listen Wi-Fi changes and has to show a persistent notification in order to automatically login campus networks when your Wi-Fi changes</string>
+    <string name="auto_login_preference_summary">For devices running Android 7.0 or newer, the App needs "Location Permission" to listen Wi-Fi changes and has to show a persistent notification in order to automatically login campus networks when your Wi-Fi changes.</string>
     <string name="request_location_permission_description">Enabling Auto Login will require "Location Permission". Please grant the permission in the following system popup.</string>
-
     <string name="logout_confirmation">Are you sure you want to log out?</string>
     <string name="acknowledged_text">Acknowledged</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="manage_online_devices">Manage online devices</string>
+    <string name="drop_session">Drop</string>
+    <string name="drop_session_success">Successfully drop %1$d session(s)</string>
+    <string name="logout">Log out</string>
 </resources>

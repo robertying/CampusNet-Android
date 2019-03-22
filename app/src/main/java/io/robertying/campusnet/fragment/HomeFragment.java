@@ -30,6 +30,8 @@ import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -37,18 +39,20 @@ import io.robertying.campusnet.R;
 import io.robertying.campusnet.custom.MySnackbar;
 import io.robertying.campusnet.helper.CredentialHelper;
 import io.robertying.campusnet.helper.TunetHelper;
+import io.robertying.campusnet.helper.TunetHelper.ResponseType;
 import io.robertying.campusnet.helper.UseregHelper;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements DeviceFragment.DeviceFragmentListener {
 
     private final String CLASS_NAME = getClass().getSimpleName();
+    private final Fragment thisFragment = this;
+    private String sessionsString;
+    private String[] credentials;
 
-    private Context context;
     private FragmentActivity activity;
     private View view;
-
     private SwipeRefreshLayout swipeRefreshLayout;
     private BottomNavigationView navigationView;
     private TextView usageTextView;
@@ -56,12 +60,17 @@ public class HomeFragment extends Fragment {
     private TextView accountTextView;
     private TextView networkTextView;
     private TextView devicesTextView;
+    private AppCompatImageButton devicesDetailButton;
     private LineChart chart;
+
+    private int primaryColor;
+    private int dividerColor;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.context = context;
+        activity = getActivity();
+        credentials = CredentialHelper.getCredentials(activity);
     }
 
     @Override
@@ -69,22 +78,24 @@ public class HomeFragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_home, container, false);
-        activity = getActivity();
 
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
         navigationView = activity.findViewById(R.id.navigation);
-        usageTextView = view.findViewById(R.id.usageNumberTextView);
-        balanceTextView = view.findViewById(R.id.balanceNumberTextView);
-        accountTextView = view.findViewById(R.id.accountNameTextView);
-        networkTextView = view.findViewById(R.id.networkNameTextView);
-        devicesTextView = view.findViewById(R.id.devicesNumberTextView);
+        usageTextView = view.findViewById(R.id.usage_number_text_view);
+        balanceTextView = view.findViewById(R.id.balance_number_text_view);
+        accountTextView = view.findViewById(R.id.account_name_text_view);
+        networkTextView = view.findViewById(R.id.network_name_text_view);
+        devicesTextView = view.findViewById(R.id.devices_number_textView);
+        devicesDetailButton = view.findViewById(R.id.devices_detail_button);
         chart = view.findViewById(R.id.chart);
+        primaryColor = getResources().getColor(R.color.colorPrimary);
+        dividerColor = getResources().getColor(R.color.divider);
 
         setSwipeToRefreshIndicator();
         setInfo();
         setChart();
 
-        TunetHelper.init(context);
+        TunetHelper.init(activity);
 
         return view;
     }
@@ -101,9 +112,15 @@ public class HomeFragment extends Fragment {
         TunetHelper.cleanup();
     }
 
+    @Override
+    public void onDialogClose(int dropped) {
+        showSnackbar(getResources().getString(R.string.drop_session_success, dropped));
+        new GetSessionsTask().execute(credentials);
+    }
+
     private void setSwipeToRefreshIndicator() {
         // set indicator color
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setColorSchemeColors(primaryColor);
 
         // set indicator position
         swipeRefreshLayout.setProgressViewOffset(false,
@@ -119,10 +136,20 @@ public class HomeFragment extends Fragment {
     }
 
     private void setInfo() {
-        SharedPreferences preferences = context
+        devicesDetailButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sessionsString != null && !sessionsString.isEmpty()) {
+                    DialogFragment fragment = DeviceFragment.newInstance(sessionsString);
+                    fragment.setTargetFragment(thisFragment, 0);
+                    fragment.show(getFragmentManager(), "DevicesDetail");
+                }
+            }
+        });
+
+        SharedPreferences preferences = activity
                 .getApplicationContext()
                 .getSharedPreferences("AppInfo", MODE_PRIVATE);
-        String[] credentials = CredentialHelper.getCredentials(context);
 
         usageTextView.setText(preferences.getString("Usage", "0.00"));
         balanceTextView.setText(preferences.getString("Balance", "0.00"));
@@ -131,11 +158,6 @@ public class HomeFragment extends Fragment {
     }
 
     private void setChart() {
-        int primaryColor = context.getApplicationContext()
-                .getResources().getColor(R.color.colorPrimary);
-        int dividerColor = context.getApplicationContext()
-                .getResources().getColor(R.color.divider);
-
         chart.setTouchEnabled(false);
         chart.setDragEnabled(false);
         chart.setScaleEnabled(false);
@@ -177,11 +199,11 @@ public class HomeFragment extends Fragment {
     private void update() {
         Log.i(CLASS_NAME, "Updating info");
         swipeRefreshLayout.setRefreshing(true);
+        devicesDetailButton.animate().alpha(0f);
 
-        String[] credentials = CredentialHelper.getCredentials(context);
         new LoginTask().execute(credentials);
         getNetwork();
-        getSessions(credentials);
+        new GetSessionsTask().execute(credentials);
         new GetUsageDetailTask().execute(credentials);
     }
 
@@ -190,20 +212,9 @@ public class HomeFragment extends Fragment {
             @Override
             public void run() {
                 WifiManager wifiManager = (WifiManager)
-                        context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                        activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 String ssid = wifiManager.getConnectionInfo().getSSID();
                 networkTextView.setText(ssid.replaceAll("^\"|\"$", ""));
-            }
-        });
-    }
-
-    private void getSessions(final String[] credentials) {
-        devicesTextView.post(new Runnable() {
-            @Override
-            public void run() {
-                String response = UseregHelper.getSessions(credentials[0], credentials[1]);
-                JsonArray sessions = new JsonParser().parse(response).getAsJsonArray();
-                devicesTextView.setText(Integer.toString(sessions.size()));
             }
         });
     }
@@ -261,7 +272,7 @@ public class HomeFragment extends Fragment {
 
     private void saveUsageDetail(List<Entry> entries) {
         String json = new Gson().toJson(entries);
-        SharedPreferences preferences = context
+        SharedPreferences preferences = activity
                 .getApplicationContext()
                 .getSharedPreferences("AppInfo", MODE_PRIVATE);
         preferences.edit()
@@ -270,7 +281,7 @@ public class HomeFragment extends Fragment {
     }
 
     private List<Entry> loadUsageDetail() {
-        SharedPreferences preferences = context
+        SharedPreferences preferences = activity
                 .getApplicationContext()
                 .getSharedPreferences("AppInfo", MODE_PRIVATE);
         String json = preferences.getString("UsageDetail", null);
@@ -279,15 +290,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void setChartData(List<Entry> entries) {
-        int primaryColor = context
-                .getApplicationContext()
-                .getResources()
-                .getColor(R.color.colorPrimary);
-
         LineDataSet dataSet = new LineDataSet(entries, "Usage");
-        dataSet.setFillDrawable(context
-                .getApplicationContext()
-                .getDrawable(R.drawable.linear_gradient_primary_color));
+        dataSet.setFillDrawable(activity.getDrawable(R.drawable.linear_gradient_primary_color));
         dataSet.setDrawFilled(true);
         dataSet.setDrawValues(false);
         dataSet.setValueTextColor(primaryColor);
@@ -295,15 +299,13 @@ public class HomeFragment extends Fragment {
         dataSet.setCircleColor(primaryColor);
         dataSet.setColor(primaryColor);
 
-        LineChart chart = view.findViewById(R.id.chart);
-
         chart.clear();
         chart.setData(new LineData(dataSet));
         chart.invalidate();
     }
 
-    private void makeSnackbar(CharSequence text) {
-        MySnackbar.make(context,
+    private void showSnackbar(CharSequence text) {
+        MySnackbar.make(activity,
                 swipeRefreshLayout,
                 navigationView,
                 text,
@@ -311,8 +313,31 @@ public class HomeFragment extends Fragment {
                 .show();
     }
 
+    private class GetSessionsTask extends AsyncTask<String, Void, JsonArray> {
+        @Override
+        protected JsonArray doInBackground(String... credentials) {
+            JsonArray sessions = null;
+            if (credentials != null) {
+                sessionsString = UseregHelper.getSessions(credentials[0], credentials[1]);
+                try {
+                    sessions = new JsonParser().parse(sessionsString).getAsJsonArray();
+                } catch (Exception e) {
+                    Log.e(CLASS_NAME, e.getMessage());
+                }
+            }
+            return sessions;
+        }
+
+        @Override
+        protected void onPostExecute(JsonArray sessions) {
+            if (sessions != null)
+                devicesTextView.setText(Integer.toString(sessions.size()));
+            devicesDetailButton.animate().alpha(1f);
+        }
+    }
+
     private class LoginResponse {
-        TunetHelper.ResponseType response;
+        ResponseType response;
         float usage;
         float balance;
     }
@@ -321,18 +346,33 @@ public class HomeFragment extends Fragment {
         @NonNull
         @Override
         protected LoginResponse doInBackground(String... credentials) {
-            Log.i(CLASS_NAME, "Logging in");
             LoginResponse loginResponse = new LoginResponse();
             String username = credentials[0];
             String password = credentials[1];
 
             if (username == null || password == null) {
-                loginResponse.response = TunetHelper.ResponseType.WRONG_CREDENTIAL;
+                loginResponse.response = ResponseType.WRONG_CREDENTIAL;
                 loginResponse.usage = 0;
                 loginResponse.balance = 0;
             } else {
-                TunetHelper.auth4Login(username, password);
-                loginResponse.response = TunetHelper.netLogin(username, password);
+                WifiManager wifiManager = (WifiManager)
+                        activity.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                String ssid = wifiManager.getConnectionInfo().getSSID();
+                ssid = ssid.replaceAll("^\"|\"$", "");
+
+                loginResponse.response = ResponseType.UNKNOWN_ERR;
+
+                if (ssid.equals("Tsinghua-5G") || ssid.equals("Tsinghua")) {
+                    Log.i(CLASS_NAME, "Net login to " + ssid);
+                    loginResponse.response = TunetHelper.netLogin(username, password);
+                }
+
+                if (ssid.equals("Tsinghua-IPv4") || ssid.equals("122A-5G")) {
+                    Log.i(CLASS_NAME, "Auth login to " + ssid);
+                    loginResponse.response = TunetHelper.auth4Login(username, password);
+                    TunetHelper.auth6Login(username, password);
+                }
+
                 loginResponse.usage = UseregHelper.getUsage();
                 loginResponse.balance = UseregHelper.getBalance();
             }
@@ -342,44 +382,47 @@ public class HomeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(@NonNull LoginResponse loginResponse) {
-            SharedPreferences preferences = context
+            SharedPreferences preferences = activity
                     .getApplicationContext()
                     .getSharedPreferences("AppInfo", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
 
             if (loginResponse.usage != 0) {
                 String usageText = String.format("%.2f", loginResponse.usage / 10e8f);
-                TextView usageTextView = view.findViewById(R.id.usageNumberTextView);
+                TextView usageTextView = view.findViewById(R.id.usage_number_text_view);
                 usageTextView.setText(usageText);
 
-                preferences.edit()
-                        .putString("Usage", usageText)
-                        .apply();
+                editor.putString("Usage", usageText);
             }
             if (loginResponse.balance != 0) {
                 String balanceText = "¥ " + String.format("%.2f", loginResponse.balance);
-                TextView balanceTextView = view.findViewById(R.id.balanceNumberTextView);
+                TextView balanceTextView = view.findViewById(R.id.balance_number_text_view);
                 balanceTextView.setText(balanceText);
 
-                preferences.edit()
-                        .putString("Balance", balanceText)
-                        .apply();
+                editor.putString("Balance", balanceText);
             }
+
+            editor.apply();
 
             switch (loginResponse.response) {
                 case OUT_OF_BALANCE:
-                    makeSnackbar(getResources().getString(R.string.out_of_balance));
+                    showSnackbar(getResources().getString(R.string.out_of_balance));
                     break;
                 case ALREADY_ONLINE:
                 case SUCCESS:
-                    makeSnackbar(getResources().getString(R.string.login_success));
+                    showSnackbar(getResources().getString(R.string.login_success));
                     break;
                 case WRONG_CREDENTIAL:
-                    makeSnackbar(getResources().getString(R.string.wrong_credentials));
+                    showSnackbar(getResources().getString(R.string.wrong_credentials));
                     break;
                 case UNKNOWN_ERR:
-                    makeSnackbar(getResources().getString(R.string.unknown_error));
+                    showSnackbar(getResources().getString(R.string.unknown_error));
                     break;
             }
+
+            Log.i(CLASS_NAME, loginResponse.response.toString());
+
+            swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -393,7 +436,6 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Entry> entries) {
             setChartData(entries);
-            swipeRefreshLayout.setRefreshing(false);
         }
     }
 }

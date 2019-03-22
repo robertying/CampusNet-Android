@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CampusNet</string>
+    <string name="title_home">主页</string>
+    <string name="title_settings">设置</string>
+    <string name="current_usage_text">当前流量</string>
+    <string name="balance_text">余额</string>
+    <string name="network_text">网络</string>
+    <string name="account_text">账户</string>
+    <string name="devices_text">设备</string>
+    <string name="no_data_text">流量详情暂不可用</string>
+    <string name="service_channel_name">CampusNet 前台服务通知</string>
+    <string name="service_channel_description">显示用于自动登录的前台服务运行状态</string>
+    <string name="app_channel_name">CampusNet 应用通知</string>
+    <string name="app_channel_description">显示联网状态或提示</string>
+    <string name="ca_update_service_description">用于定时更新服务器证书以便使用 HTTPS 连接</string>
+    <string name="auto_login_service_description">用于监听网络改变以便开启自动登录</string>
+    <string name="auto_login_notification_text">自动登录服务正在运行</string>
+    <string name="username_text">用户名</string>
+    <string name="password_text">密码</string>
+    <string name="prev_text">上一页</string>
+    <string name="next_text">下一页</string>
+    <string name="done_text">完成</string>
+    <string name="login_success">成功登录校园网</string>
+    <string name="missing_credentials_prompt">请完整输入用户名与密码</string>
+    <string name="wrong_credentials">您的密码似乎已被更改，请重新登录</string>
+    <string name="wrong_credentials_prompt">请输入正确的用户名和密码</string>
+    <string name="unknown_error">未知错误：请确保您连接的网络属于校园网</string>
+    <string name="out_of_balance">余额不足，请及时充值</string>
+    <string name="auto_login_preference_title">为校园网开启自动登录</string>
+    <string name="auto_login_preference_summary">对于运行 Android 7.0 或更高的设备，如需开启自动登录，则需要授予 App \"位置权限\"以使其能够获取 Wi-Fi 信息；App 将在通知栏保持前台服务运行。</string>
+    <string name="request_location_permission_description">开启自动登录需要请求\"位置权限\"。请在接下来的系统弹出窗口中授予 App 该权限。</string>
+    <string name="drop_session_success">成功下线 %1$d 台设备</string>
+    <string name="drop_session">下线</string>
+    <string name="manage_online_devices">管理在线设备</string>
+    <string name="cancel">取消</string>
+    <string name="no">取消</string>
+    <string name="yes">确定</string>
+    <string name="acknowledged_text">我已知晓</string>
+    <string name="logout_confirmation">确定要退出登录吗？</string>
+    <string name="logout">退出登录</string>
+</resources>

@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import io.robertying.campusnet.helper.CredentialHelper;
 import io.robertying.campusnet.helper.TunetHelper;
 import io.robertying.campusnet.helper.TunetHelper.ResponseType;
-import io.robertying.campusnet.helper.UseregHelper;
 
 public class WifiBroadcastReceiver extends BroadcastReceiver {
 
@@ -32,13 +31,14 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
                 WifiManager wifiManager = (WifiManager)
                         context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 String ssid = wifiManager.getConnectionInfo().getSSID();
+                ssid = ssid.replaceAll("^\"|\"$", "");
 
                 if (!ssid.equals(lastTimeConnectedSsid) || !lastTimeConnected) {
                     Log.i(CLASS_NAME, "Connected to Wi-Fi " + ssid);
                     lastTimeConnectedSsid = ssid;
                     final String[] credentials = CredentialHelper.getCredentials(context);
 
-                    if (ssid.equals("\"Tsinghua-5G\"") || ssid.equals("\"Tsinghua\"")) {
+                    if (ssid.equals("Tsinghua-5G") || ssid.equals("Tsinghua")) {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -48,7 +48,7 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
 
                         Log.i(CLASS_NAME, "NetLoginTask started for " + ssid);
                     }
-                    if (ssid.equals("\"Tsinghua-IPv4\"")) {
+                    if (ssid.equals("Tsinghua-IPv4") || ssid.equals("122A-5G")) {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -95,7 +95,8 @@ public class WifiBroadcastReceiver extends BroadcastReceiver {
             if (username == null || password == null) {
                 response = ResponseType.WRONG_CREDENTIAL;
             } else {
-                response = UseregHelper.useregLogin(username, password);
+                response = TunetHelper.auth4Login(username, password);
+                TunetHelper.auth6Login(username, password);
             }
             Log.i(CLASS_NAME, response.toString());
             return response;

@@ -2,13 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/homeFragment"
+    android:id="@+id/home_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.HomeFragment">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -17,14 +17,14 @@
             android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/verticalCenterGuideline"
+                android:id="@+id/vertical_center_guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/infoCardView"
+                android:id="@+id/info_card_view"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 app:cardBackgroundColor="@color/colorPrimary"
@@ -34,7 +34,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/currentUsageTextView"
+                android:id="@+id/current_usage_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="48dp"
@@ -44,13 +44,13 @@
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/infoCardView"
+                app:layout_constraintStart_toEndOf="@+id/info_card_view"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/infoCardView"
+                app:layout_constraintTop_toTopOf="@+id/info_card_view"
                 tools:text="当前流量" />
 
             <TextView
-                android:id="@+id/usageNumberTextView"
+                android:id="@+id/usage_number_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -59,15 +59,15 @@
                 android:text="@string/usage_number"
                 android:textColor="@color/design_default_color_on_primary"
                 android:textSize="60sp"
-                app:layout_constraintBottom_toTopOf="@+id/balanceTextView"
-                app:layout_constraintEnd_toStartOf="@id/unitTextView"
+                app:layout_constraintBottom_toTopOf="@+id/balance_text_view"
+                app:layout_constraintEnd_toStartOf="@id/unit_text_view"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/currentUsageTextView"
+                app:layout_constraintTop_toBottomOf="@+id/current_usage_text_view"
                 tools:text="25.00" />
 
             <TextView
-                android:id="@+id/unitTextView"
+                android:id="@+id/unit_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -76,13 +76,13 @@
                 android:text="@string/usage_unit"
                 android:textColor="@color/design_default_color_on_primary"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="@+id/usageNumberTextView"
+                app:layout_constraintBottom_toBottomOf="@+id/usage_number_text_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/usageNumberTextView"
+                app:layout_constraintStart_toEndOf="@+id/usage_number_text_view"
                 tools:text="GB" />
 
             <TextView
-                android:id="@+id/balanceTextView"
+                android:id="@+id/balance_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="5dp"
@@ -90,13 +90,13 @@
                 android:textColor="@color/design_default_color_on_primary"
                 android:textSize="18sp"
                 android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/balanceNumberTextView"
-                app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
+                app:layout_constraintBottom_toTopOf="@+id/balance_number_text_view"
+                app:layout_constraintEnd_toEndOf="@id/vertical_center_guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="余额" />
 
             <TextView
-                android:id="@+id/balanceNumberTextView"
+                android:id="@+id/balance_number_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -104,13 +104,13 @@
                 android:text="@string/placeholder"
                 android:textColor="@color/design_default_color_on_primary"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/infoCardView"
-                app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
+                app:layout_constraintBottom_toBottomOf="@+id/info_card_view"
+                app:layout_constraintEnd_toEndOf="@id/vertical_center_guideline"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:text="¥12.12" />
 
             <TextView
-                android:id="@+id/accountTextView"
+                android:id="@+id/account_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="5dp"
@@ -118,13 +118,13 @@
                 android:textColor="@color/design_default_color_on_primary"
                 android:textSize="18sp"
                 android:visibility="visible"
-                app:layout_constraintBottom_toTopOf="@+id/balanceNumberTextView"
+                app:layout_constraintBottom_toTopOf="@+id/balance_number_text_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
+                app:layout_constraintStart_toStartOf="@id/vertical_center_guideline"
                 tools:text="账户" />
 
             <TextView
-                android:id="@+id/accountNameTextView"
+                android:id="@+id/account_name_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -132,13 +132,13 @@
                 android:text="@string/placeholder"
                 android:textColor="@color/design_default_color_on_primary"
                 android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@+id/infoCardView"
+                app:layout_constraintBottom_toBottomOf="@+id/info_card_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
+                app:layout_constraintStart_toStartOf="@id/vertical_center_guideline"
                 tools:text="yingr16" />
 
             <TextView
-                android:id="@+id/networkTextView"
+                android:id="@+id/network_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -146,25 +146,25 @@
                 android:text="@string/network_text"
                 android:textSize="18sp"
                 android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
+                app:layout_constraintEnd_toEndOf="@id/vertical_center_guideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/infoCardView"
+                app:layout_constraintTop_toBottomOf="@+id/info_card_view"
                 tools:text="网络" />
 
             <TextView
-                android:id="@+id/networkNameTextView"
+                android:id="@+id/network_name_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="5dp"
                 android:text="@string/placeholder"
                 android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="@id/verticalCenterGuideline"
+                app:layout_constraintEnd_toEndOf="@id/vertical_center_guideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/networkTextView"
+                app:layout_constraintTop_toBottomOf="@+id/network_text_view"
                 tools:text="Tsinghua-5G" />
 
             <TextView
-                android:id="@+id/devicesTextView"
+                android:id="@+id/devices_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -173,21 +173,33 @@
                 android:textSize="18sp"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/infoCardView"
+                app:layout_constraintStart_toStartOf="@id/vertical_center_guideline"
+                app:layout_constraintTop_toBottomOf="@+id/info_card_view"
                 tools:text="设备" />
 
             <TextView
-                android:id="@+id/devicesNumberTextView"
+                android:id="@+id/devices_number_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="5dp"
                 android:text="@string/placeholder"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/verticalCenterGuideline"
-                app:layout_constraintTop_toBottomOf="@+id/devicesTextView"
+                app:layout_constraintStart_toStartOf="@id/vertical_center_guideline"
+                app:layout_constraintTop_toBottomOf="@+id/devices_text_view"
                 tools:text="3" />
+
+            <ImageButton
+                android:id="@+id/devices_detail_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/white"
+                android:contentDescription="@string/devices_text"
+                android:src="@drawable/ic_keyboard_arrow_right_black_24dp"
+                android:tint="@android:color/tab_indicator_text"
+                app:layout_constraintBottom_toBottomOf="@+id/devices_number_textView"
+                app:layout_constraintStart_toEndOf="@+id/devices_text_view"
+                app:layout_constraintTop_toTopOf="@+id/devices_text_view" />
 
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/chart"
@@ -197,7 +209,7 @@
                 android:layout_marginBottom="32dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/networkNameTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/network_name_text_view" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
