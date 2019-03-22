@@ -80,6 +80,8 @@ lint/tmp/
 # lint/reports/
 
 .DS_Store
+.vscode/
 
 app/src/main/assets/cacert.pem
 app/release/output.json
+app/google-services.json
