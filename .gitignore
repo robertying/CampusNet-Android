@@ -89,3 +89,4 @@ app/release/output.json
 app/google-services.json
 local.keystore
 .env.default
+secrets.tar.gz
