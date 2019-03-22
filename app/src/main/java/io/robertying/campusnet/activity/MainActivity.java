@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import io.fabric.sdk.android.Fabric;
 import io.robertying.campusnet.R;
 import io.robertying.campusnet.fragment.HomeFragment;
 import io.robertying.campusnet.fragment.SettingsFragment;
@@ -57,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Fabric.with(this, new Crashlytics());
 
         firstRunConfigure();
 
