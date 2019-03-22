@@ -1,1 +1,1 @@
-include ':app', ':htmltidy'
+include ':htmltidy', ':app'
