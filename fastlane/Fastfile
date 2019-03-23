@@ -12,7 +12,7 @@ platform :android do
   lane :beta do
     gradle(
       task: 'assemble',
-      build_type: 'Release'
+      build_type: 'Release',
       print_command_output: false
     )
     crashlytics
