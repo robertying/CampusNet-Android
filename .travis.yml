@@ -22,7 +22,7 @@ cache:
 before_install:
   - openssl aes-256-cbc -K $encrypted_760efcc15f1f_key -iv $encrypted_760efcc15f1f_iv
     -in secrets.tar.gz.enc -out secrets.tar.gz -d
-  - tar xvf secrets.tar.gz
+  - tar zxf secrets.tar.gz
 
 install:
   - touch $HOME/.android/repositories.cfg

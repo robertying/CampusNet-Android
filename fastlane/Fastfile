@@ -13,6 +13,7 @@ platform :android do
     gradle(
       task: 'assemble',
       build_type: 'Release'
+      print_command_output: false
     )
     crashlytics
   end
