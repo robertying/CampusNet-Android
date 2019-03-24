@@ -2,6 +2,7 @@ package io.robertying.campusnet.helper;
 
 import android.content.Context;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
 public class TunetHelper {
@@ -37,6 +38,7 @@ public class TunetHelper {
         tunetCleanup();
     }
 
+    @Keep
     public enum ResponseType {
         SUCCESS,
         UNKNOWN_ERR,
