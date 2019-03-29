@@ -1,5 +1,6 @@
 package io.robertying.campusnet.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.wifi.WifiManager;
@@ -30,6 +31,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -219,7 +221,7 @@ public class HomeFragment extends Fragment implements DeviceFragment.DeviceFragm
         });
     }
 
-    @NonNull
+    @Nullable
     private List<Entry> getUsageDetail(String username, String password) {
         Calendar now = Calendar.getInstance();
         int y = now.get(Calendar.YEAR);
@@ -244,6 +246,9 @@ public class HomeFragment extends Fragment implements DeviceFragment.DeviceFragm
                     startTime,
                     endTime)
                     / 10e8f;
+
+            if (Float.compare(usageInGB, 0f) == 0)
+                return null;
             sum += usageInGB;
 
             entries.add(new Entry(i, sum));
@@ -382,42 +387,45 @@ public class HomeFragment extends Fragment implements DeviceFragment.DeviceFragm
 
         @Override
         protected void onPostExecute(@NonNull LoginResponse loginResponse) {
-            SharedPreferences preferences = activity
-                    .getApplicationContext()
-                    .getSharedPreferences("AppInfo", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
+            Activity activity = getActivity();
+            if (activity != null && isAdded()) {
+                SharedPreferences preferences = activity
+                        .getApplicationContext()
+                        .getSharedPreferences("AppInfo", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
 
-            if (loginResponse.usage != 0) {
-                String usageText = String.format("%.2f", loginResponse.usage / 10e8f);
-                TextView usageTextView = view.findViewById(R.id.usage_number_text_view);
-                usageTextView.setText(usageText);
+                if (loginResponse.usage != 0) {
+                    String usageText = String.format("%.2f", loginResponse.usage / 10e8f);
+                    TextView usageTextView = view.findViewById(R.id.usage_number_text_view);
+                    usageTextView.setText(usageText);
 
-                editor.putString("Usage", usageText);
-            }
-            if (loginResponse.balance != 0) {
-                String balanceText = "¥ " + String.format("%.2f", loginResponse.balance);
-                TextView balanceTextView = view.findViewById(R.id.balance_number_text_view);
-                balanceTextView.setText(balanceText);
+                    editor.putString("Usage", usageText);
+                }
+                if (loginResponse.balance != 0) {
+                    String balanceText = "¥ " + String.format("%.2f", loginResponse.balance);
+                    TextView balanceTextView = view.findViewById(R.id.balance_number_text_view);
+                    balanceTextView.setText(balanceText);
 
-                editor.putString("Balance", balanceText);
-            }
+                    editor.putString("Balance", balanceText);
+                }
 
-            editor.apply();
+                editor.apply();
 
-            switch (loginResponse.response) {
-                case OUT_OF_BALANCE:
-                    showSnackbar(getResources().getString(R.string.out_of_balance));
-                    break;
-                case ALREADY_ONLINE:
-                case SUCCESS:
-                    showSnackbar(getResources().getString(R.string.login_success));
-                    break;
-                case WRONG_CREDENTIAL:
-                    showSnackbar(getResources().getString(R.string.wrong_credentials));
-                    break;
-                case UNKNOWN_ERR:
-                    showSnackbar(getResources().getString(R.string.unknown_error));
-                    break;
+                switch (loginResponse.response) {
+                    case OUT_OF_BALANCE:
+                        showSnackbar(getResources().getString(R.string.out_of_balance));
+                        break;
+                    case ALREADY_ONLINE:
+                    case SUCCESS:
+                        showSnackbar(getResources().getString(R.string.login_success));
+                        break;
+                    case WRONG_CREDENTIAL:
+                        showSnackbar(getResources().getString(R.string.wrong_credentials));
+                        break;
+                    case UNKNOWN_ERR:
+                        showSnackbar(getResources().getString(R.string.unknown_error));
+                        break;
+                }
             }
 
             Log.i(CLASS_NAME, loginResponse.response.toString());
@@ -435,7 +443,8 @@ public class HomeFragment extends Fragment implements DeviceFragment.DeviceFragm
 
         @Override
         protected void onPostExecute(List<Entry> entries) {
-            setChartData(entries);
+            if (entries != null)
+                setChartData(entries);
         }
     }
 }
