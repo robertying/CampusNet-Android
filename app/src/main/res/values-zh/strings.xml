@@ -8,7 +8,7 @@
     <string name="network_text">网络</string>
     <string name="account_text">账户</string>
     <string name="devices_text">设备</string>
-    <string name="no_data_text">流量详情暂不可用</string>
+    <string name="no_data_text">流量详情加载中……</string>
     <string name="service_channel_name">CampusNet 前台服务通知</string>
     <string name="service_channel_description">显示用于自动登录的前台服务运行状态</string>
     <string name="app_channel_name">CampusNet 应用通知</string>

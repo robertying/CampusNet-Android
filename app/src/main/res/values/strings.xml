@@ -11,7 +11,7 @@
     <string name="account_text">Account</string>
     <string name="devices_text">Devices</string>
     <string name="placeholder" translatable="false">--</string>
-    <string name="no_data_text">Usage Data Unavailable</string>
+    <string name="no_data_text">Loading Usage Data</string>
     <string name="service_channel_name">CampusNet Service Channel</string>
     <string name="service_channel_description">Used to display the app\'s service running state</string>
     <string name="app_channel_name">CampusNet Notification Channel</string>
