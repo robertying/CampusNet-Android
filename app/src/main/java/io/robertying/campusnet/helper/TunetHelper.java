@@ -49,5 +49,6 @@ public class TunetHelper {
         TOO_MANY_ATTEMPTS,  // E2533
         ALREADY_ONLINE,     // E2620
         INVALID_IP,         // E2833
+        POSSIBLY_WRONG_ACID // sign_error
     }
 }
