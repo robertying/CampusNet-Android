@@ -394,20 +394,17 @@ public class HomeFragment extends Fragment implements DeviceFragment.DeviceFragm
                         .getSharedPreferences("AppInfo", MODE_PRIVATE);
                 SharedPreferences.Editor editor = preferences.edit();
 
-                if (loginResponse.usage != 0) {
-                    String usageText = String.format("%.2f", loginResponse.usage / 10e8f);
-                    TextView usageTextView = view.findViewById(R.id.usage_number_text_view);
-                    usageTextView.setText(usageText);
+                String usageText = String.format("%.2f", loginResponse.usage / 10e8f);
+                TextView usageTextView = view.findViewById(R.id.usage_number_text_view);
+                usageTextView.setText(usageText);
 
-                    editor.putString("Usage", usageText);
-                }
-                if (loginResponse.balance != 0) {
-                    String balanceText = "¥ " + String.format("%.2f", loginResponse.balance);
-                    TextView balanceTextView = view.findViewById(R.id.balance_number_text_view);
-                    balanceTextView.setText(balanceText);
+                editor.putString("Usage", usageText);
 
-                    editor.putString("Balance", balanceText);
-                }
+                String balanceText = "¥ " + String.format("%.2f", loginResponse.balance);
+                TextView balanceTextView = view.findViewById(R.id.balance_number_text_view);
+                balanceTextView.setText(balanceText);
+
+                editor.putString("Balance", balanceText);
 
                 editor.apply();
 
