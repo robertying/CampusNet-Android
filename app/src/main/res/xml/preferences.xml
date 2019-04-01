@@ -6,4 +6,9 @@
         app:key="Logout"
         app:title="@string/logout" />
 
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="CheckUpdate"
+        app:title="@string/check_update" />
+
 </androidx.preference.PreferenceScreen>

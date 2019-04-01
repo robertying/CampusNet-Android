@@ -44,4 +44,13 @@
     <string name="drop_session">Drop</string>
     <string name="drop_session_success">Successfully drop %1$d session(s)</string>
     <string name="logout">Log out</string>
+    <string name="check_update">Check update</string>
+    <string name="version_text">Version</string>
+    <string name="checking_update">Checking update...</string>
+    <string name="update_found">New update found %1$s</string>
+    <string name="ok">Ok</string>
+    <string name="update_not_found">Update not found</string>
+    <string name="update">Update</string>
+    <string name="error_text">Error</string>
+    <string name="checking_update_fail">Fail checking update</string>
 </resources>

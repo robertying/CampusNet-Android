@@ -13,20 +13,29 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.LinearLayout;
 
+import com.github.javiersantos.appupdater.AppUpdaterUtils;
+import com.github.javiersantos.appupdater.enums.AppUpdaterError;
+import com.github.javiersantos.appupdater.enums.UpdateFrom;
+import com.github.javiersantos.appupdater.objects.Update;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
+import io.robertying.campusnet.BuildConfig;
 import io.robertying.campusnet.R;
 import io.robertying.campusnet.activity.FirstRunActivity;
 import io.robertying.campusnet.activity.MainActivity;
+import io.robertying.campusnet.custom.MySnackbar;
 import io.robertying.campusnet.helper.CredentialHelper;
 import io.robertying.campusnet.service.AutoLoginService;
 
@@ -37,6 +46,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Nullable
     private SwitchPreferenceCompat autoLoginSwitchPreference;
+    private Preference checkUpdatePreference;
+    private BottomNavigationView navigationView;
     @Nullable
     private FragmentActivity activity;
 
@@ -55,6 +66,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                              Bundle savedInstanceState) {
         LinearLayout view = (LinearLayout) super.onCreateView(inflater, container, savedInstanceState);
         activity = getActivity();
+        navigationView = activity.findViewById(R.id.navigation);
 
         if (view != null) {
             view.setBackgroundColor(getResources().getColor(android.R.color.white));
@@ -82,6 +94,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         showLogoutConfirmation();
+                        return true;
+                    }
+                });
+
+                checkUpdatePreference = findPreference("CheckUpdate");
+                int versionCode = BuildConfig.VERSION_CODE;
+                String versionName = BuildConfig.VERSION_NAME;
+                checkUpdatePreference.setSummary(String.format("%s %s (%d)",
+                        getResources().getString(R.string.version_text),
+                        versionName,
+                        versionCode));
+                checkUpdatePreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        startCheckUpdate();
                         return true;
                     }
                 });
@@ -119,6 +146,44 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
 
         view.addView(doneButton);
+    }
+
+    private void startCheckUpdate() {
+        final FragmentActivity activity = getActivity();
+        if (activity != null) {
+            MySnackbar.make(activity,
+                    getView(),
+                    navigationView,
+                    getResources().getString(R.string.checking_update),
+                    Snackbar.LENGTH_LONG)
+                    .show();
+            AppUpdaterUtils appUpdaterUtils = new AppUpdaterUtils(activity)
+                    .setUpdateFrom(UpdateFrom.GITHUB)
+                    .setGitHubUserAndRepo("robertying", "CampusNet-Android")
+                    .withListener(new AppUpdaterUtils.UpdateListener() {
+                        @Override
+                        public void onSuccess(Update update, Boolean isUpdateAvailable) {
+                            Log.i(CLASS_NAME, "Latest Version: " + update.getLatestVersion());
+
+                            DialogFragment fragment = UpdateFragment.newInstance(isUpdateAvailable,
+                                    update.getLatestVersion(),
+                                    update.getUrlToDownload().toString());
+                            fragment.show(getFragmentManager(), "CheckUpdate");
+                        }
+
+                        @Override
+                        public void onFailed(AppUpdaterError error) {
+                            Log.e(CLASS_NAME, error.toString());
+                            MySnackbar.make(activity,
+                                    getView(),
+                                    navigationView,
+                                    getResources().getString(R.string.checking_update_fail),
+                                    Snackbar.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+            appUpdaterUtils.start();
+        }
     }
 
     private void showLocationPermissionExplanation() {
